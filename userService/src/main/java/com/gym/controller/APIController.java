@@ -1,0 +1,124 @@
+package com.gym.controller;
+
+import com.gym.FeignClient.EmployeeFeignClient;
+import com.gym.FeignClient.EquipmentFeignClient;
+import com.gym.dto.Employee;
+import com.gym.dto.Equipment;
+import com.gym.dto.Member;
+import com.gym.pojo.Admin;
+import com.gym.service.AdminService;
+import com.gym.FeignClient.MemberFeignClient;
+import com.gym.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class APIController {
+
+    private static final String SESSION_ADMIN = "admin";
+    private static final String SESSION_MEMBER = "member";
+    private final MemberFeignClient memberFeignClient;
+    private final EquipmentFeignClient equipmentFeignClient;
+    private final EmployeeFeignClient employeeFeignClient;
+    private final UserServiceImpl userServiceImpl;
+    private final AdminService adminService;
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok(loginSuccess());
+    }
+
+    @PostMapping("/adminLogin")
+    public ResponseEntity<Map<String, Object>> adminLogin(Admin admin, HttpSession httpSession) {
+        Admin adminLogin = adminService.adminLogin(admin);
+        if (adminLogin==null) {
+            return loginFail();
+    }
+        putAdminMainDataInSession(httpSession, adminLogin);
+        return ResponseEntity.ok(loginSuccess());
+
+}
+
+    @PostMapping("/userLogin")
+    public ResponseEntity<Map<String, Object>> userLogin(@RequestParam String memberAccount,@RequestParam String memberPassword, HttpSession httpSession) {
+        Member userLogin = memberFeignClient.memberSelect(memberAccount,memberPassword);
+        if (userLogin==null) {
+            return loginFail();
+        }
+        putUserMainDataInSession(httpSession, userLogin);
+        return ResponseEntity.ok(loginSuccess());
+
+    }
+    @GetMapping("/toUserMain")
+    public ResponseEntity<Map<String, Object>> toUserMain(HttpSession session) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("success", true);
+        body.put("member",session.getAttribute("member"));
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/toAdminMain")
+    public ResponseEntity<Map<String, Object>> toAdminMain(HttpSession session) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("success", true);
+        body.put("memberTotal", session.getAttribute("memberCount"));
+        body.put("humanTotal", session.getAttribute("totalCount"));
+        body.put("equipmentTotal", session.getAttribute("equipmentCount"));
+        body.put("employeeTotal", session.getAttribute("employeeCount"));
+        return ResponseEntity.ok(body);
+    }
+
+
+
+private static Map<String, Object> loginSuccess() {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("success", true);
+        return map;
+}
+private static ResponseEntity<Map<String, Object>> loginFail() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", false);
+        map.put("message", "用户名或密码错误");
+        return ResponseEntity.badRequest().body(map);
+}
+
+private void putAdminMainDataInSession(HttpSession session, Admin admin) {
+    session.setAttribute(SESSION_ADMIN, admin);
+    List<Member> memberCount =Objects.requireNonNull(memberFeignClient.selMember());
+    List<Equipment> equipmentCount = Objects.requireNonNull(equipmentFeignClient.selEquipment());
+    List<Employee> employeeCount =  Objects.requireNonNull(employeeFeignClient.selEmployee());
+    Integer totalCount = memberCount.size() + employeeCount.size();
+    session.setAttribute("totalCount", totalCount);
+    session.setAttribute("memberCount", memberCount);
+    session.setAttribute("equipmentCount", equipmentCount);
+    session.setAttribute("employeeCount", employeeCount);
+}
+
+    private void putUserMainDataInSession(HttpSession session, Member member) {
+        session.setAttribute(SESSION_MEMBER, member);
+        session.setAttribute("member", member);
+        session.setAttribute("memberName", member.getMemberName());
+        session.setAttribute("memberAccount", member.getMemberAccount());
+        session.setAttribute("memberGender", member.getMemberGender());
+        session.setAttribute("memberAge", member.getMemberAge());
+        session.setAttribute("memberHeight", member.getMemberHeight());
+        session.setAttribute("memberWeight", member.getMemberWeight());
+        session.setAttribute("memberPhone", member.getMemberPhone());
+    }
+
+
+}

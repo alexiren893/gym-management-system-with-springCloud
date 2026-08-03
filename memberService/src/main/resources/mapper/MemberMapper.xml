@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gym.mapper.MemberMapper">
+    <insert id="insertMember" parameterType="com.gym.pojo.Member">
+        insert into member(memberAccount,memberPassword) values(#{memberAccount},#{memberPassword})
+    </insert>
+    <select id="userSelect" resultType="com.gym.pojo.Member">
+        select * from member where member_account = #{memberAccount} and member_password = #{memberPassword}
+    </select>
+</mapper>
