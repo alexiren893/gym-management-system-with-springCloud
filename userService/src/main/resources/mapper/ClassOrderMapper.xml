@@ -2,15 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gym.mapper.ClassOrderMapper">
-    <select id="listByMemberAccount" resultType="com.gym.pojo.ClassOrder">
+<mapper namespace="com.gym.user.mapper.ClassOrderMapper">
+    <select id="listByMemberAccount" resultType="com.gym.user.pojo.ClassOrder">
         select * from class_order where member_account = #{memberAccount}
     </select>
-    <insert id="insertByClassTableWithMemberName" parameterType="com.gym.pojo.ClassTable">
+    <insert id="insertByClassTableWithMemberName" parameterType="com.gym.user.pojo.ClassTable">
         insert into class_order(class_id,class_name,coach,member_name,member_account,class_begin)
         values(#{classTable.classId},#{classTable.className},#{classTable.coach},#{memberName},#{memberAccount},#{classTable.classBegin})
     </insert>
-    <delete id="deleteByClassOrderIdWithMemberAccount" parameterType="com.gym.pojo.ClassOrder">
+    <delete id="deleteByClassOrderIdWithMemberAccount" parameterType="com.gym.user.pojo.ClassOrder">
         delete from class_order where class_order_id = #{classOrderId} and member_account = #{memberAccount}
     </delete>
 </mapper>

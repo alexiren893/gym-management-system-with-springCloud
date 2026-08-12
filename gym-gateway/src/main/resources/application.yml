@@ -1,0 +1,31 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateWay
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.1.147:8848
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: userService
+              uri: lb://userService
+              predicates:
+                        - Path=/api/**, /api/user/**
+            - id: memberService
+              uri: lb://memberService
+              predicates:
+                        - Path=/api/member/**
+            - id: employeeService
+              uri: lb://employeeService
+              predicates:
+                        - Path=/api/employee/**
+            - id: equipmentService
+              uri: lb://equipmentService
+              predicates:
+                        - Path=/api/equipment/**
