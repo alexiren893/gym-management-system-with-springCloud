@@ -13,10 +13,6 @@ spring:
       server:
         webflux:
           routes:
-            - id: userService
-              uri: lb://userService
-              predicates:
-                        - Path=/api/**, /api/user/**
             - id: memberService
               uri: lb://memberService
               predicates:
@@ -29,3 +25,7 @@ spring:
               uri: lb://equipmentService
               predicates:
                         - Path=/api/equipment/**
+            - id: userService
+              uri: lb://userService
+              predicates:
+                - Path=/api/**, /api/user/**
