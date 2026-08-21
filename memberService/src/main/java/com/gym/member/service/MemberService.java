@@ -5,4 +5,5 @@ import com.gym.member.pojo.Member;
 
 public interface MemberService extends IService<Member> {
     Member memberSelect(String memberAccount,String memberPassword);
+    Boolean updateMember(Member member);
 }

@@ -1,5 +1,6 @@
 package com.gym.user.controller;
 
+import com.gym.user.FeignClient.MemberFeignClient;
 import com.gym.user.dto.Member;
 import com.gym.user.pojo.ClassTable;
 import com.gym.user.service.ClassOrderService;
@@ -17,10 +18,12 @@ public class ApiUserController {
     private static final String SESSION_MEMBER = "member";
     private final ClassTableService classTableService;
     private final ClassOrderService classOrderService ;
+    private final MemberFeignClient memberFeignClient;
 
-    public ApiUserController(ClassTableService classTableService, ClassOrderService classOrderService) {
+    public ApiUserController(ClassTableService classTableService, ClassOrderService classOrderService, MemberFeignClient memberFeignClient, MemberFeignClient memberFeignClient1) {
         this.classTableService = classTableService;
         this.classOrderService = classOrderService;
+        this.memberFeignClient = memberFeignClient1;
     }
 
 
@@ -30,6 +33,27 @@ public class ApiUserController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("classList", classTableService.list());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/toUpdateInfo")
+    public ResponseEntity<Map<String, Object>> toUpdateInfo(HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("member", session.getAttribute("member"));
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/updateInfo")
+    public ResponseEntity<Map<String, Object>> UpdateInfo(Member member, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        session.setAttribute("member", member);
+        Map<String, Object> updateMember = memberFeignClient.updateMember((Member) session.getAttribute("member"));
+        if (updateMember != null && updateMember.get("success").equals(true)) {
+            result.put("success", true);
+        }else {
+            result.put("fail", false);
+        }
         return ResponseEntity.ok(result);
     }
 

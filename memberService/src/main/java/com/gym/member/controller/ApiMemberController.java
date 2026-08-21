@@ -50,9 +50,9 @@ public class ApiMemberController {
 
     @PostMapping("/updateMember")
     public Map<String, Object> updateMember(Member member) {
-        memberService.updateById(member);
+        Boolean updateMember = memberService.updateMember(member);
         Map<String, Object> map = new HashMap<>();
-        map.put("success", true);
+        map.put("success", updateMember);
         return map;
     }
 

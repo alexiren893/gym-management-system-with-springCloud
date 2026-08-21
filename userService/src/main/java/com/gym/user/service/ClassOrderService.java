@@ -10,4 +10,5 @@ public interface ClassOrderService extends IService<ClassOrder> {
     List<ClassOrder> listByMemberAccount(Integer memberAccount);
     Boolean insertByClassTableWithMemberName(ClassTable classTable, String memberName, Integer memberAccount);
     Boolean deleteByClassOrderIdWithMemberAccount(Integer classOrderId, Integer memberAccount);
+    List<ClassOrder> selectByClassOrderId(Integer classId);
 }

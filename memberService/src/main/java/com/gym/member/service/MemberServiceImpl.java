@@ -18,4 +18,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     public Member memberSelect(String memberAccount,String memberPassword) {
         return memberMapper.userSelect(memberAccount,memberPassword);
     }
+
+    @Override
+    public Boolean updateMember(Member member) {
+        return memberMapper.updateMember(member);
+    }
 }

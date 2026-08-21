@@ -6,6 +6,6 @@
 <mapper namespace="com.gym.user.mapper.AdminMapper">
 
     <select id="adminLogin" resultType="com.gym.user.pojo.Admin">
-        select * from Admin where adminAccount = #{adminAccount} and adminPassword = #{adminPassword}
+        select * from Admin where admin_account = #{adminAccount} and admin_password = #{adminPassword}
     </select>
 </mapper>

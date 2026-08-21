@@ -1,5 +1,7 @@
 package com.gym.user.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.user.FeignClient.EmployeeFeignClient;
 import com.gym.user.FeignClient.EquipmentFeignClient;
 import com.gym.user.dto.Employee;
@@ -43,8 +45,8 @@ public class APIController {
     }
 
     @PostMapping("/adminLogin")
-    public ResponseEntity<Map<String, Object>> adminLogin(Admin admin, HttpSession httpSession) {
-        Admin adminLogin = adminService.adminLogin(admin);
+    public ResponseEntity<Map<String, Object>> adminLogin(@RequestParam("adminAccount") String adminAccount, @RequestParam("adminPassword") String adminPassword, HttpSession httpSession) {
+        Admin adminLogin = adminService.adminLogin(adminAccount,adminPassword);
         if (adminLogin==null) {
             return loginFail();
     }
@@ -98,10 +100,13 @@ private static ResponseEntity<Map<String, Object>> loginFail() {
 
 private void putAdminMainDataInSession(HttpSession session, Admin admin) {
     session.setAttribute(SESSION_ADMIN, admin);
-    List<Member> memberCount =Objects.requireNonNull(memberFeignClient.selMember());
-    List<Equipment> equipmentCount = Objects.requireNonNull(equipmentFeignClient.selEquipment());
-    List<Employee> employeeCount =  Objects.requireNonNull(employeeFeignClient.selEmployee());
-    Integer totalCount = memberCount.size() + employeeCount.size();
+    List<Member> memberList = new ObjectMapper().convertValue(memberFeignClient.selMember().get("memberList"), new TypeReference<List<Member>>(){});
+    Integer memberCount = memberList.size();
+    List<Equipment> equipmentList = new ObjectMapper().convertValue(equipmentFeignClient.selEquipment().get("equipmentList"), new TypeReference<List<Equipment>>(){});
+    Integer equipmentCount = equipmentList.size();
+    List<Employee> employeeList = new ObjectMapper().convertValue(employeeFeignClient.selEmployee().get("employeeList"), new TypeReference<List<Employee>>(){});
+    Integer employeeCount = employeeList.size();
+    Integer totalCount = memberCount + employeeCount;
     session.setAttribute("totalCount", totalCount);
     session.setAttribute("memberCount", memberCount);
     session.setAttribute("equipmentCount", equipmentCount);

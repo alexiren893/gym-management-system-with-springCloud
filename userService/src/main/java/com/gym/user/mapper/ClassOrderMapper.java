@@ -13,4 +13,5 @@ public interface ClassOrderMapper extends BaseMapper<ClassOrder> {
     List<ClassOrder> listByMemberAccount(Integer memberAccount);
     Boolean insertByClassTableWithMemberName(@Param("classTable") ClassTable classTable, @Param("memberName") String memberName, @Param("memberAccount") Integer memberAccount);
     Boolean deleteByClassOrderIdWithMemberAccount(@Param("classOrderId") Integer classOrderId, @Param("memberAccount") Integer memberAccount);
+    List<ClassOrder> selectByClassOrderId(@Param("classId") Integer classId);
 }

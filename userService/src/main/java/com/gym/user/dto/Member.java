@@ -12,5 +12,8 @@ public class Member {
     private Double memberHeight;
     private Double memberWeight;
     private String memberPhone;
+    private String cardTime;
+    private Integer cardClass;
+    private Integer cardNextClass;
 }
 

@@ -32,4 +32,9 @@ public class ClassOrderServiceImpl extends ServiceImpl<ClassOrderMapper, ClassOr
     public Boolean deleteByClassOrderIdWithMemberAccount(Integer classOrderId, Integer memberAccount) {
         return classOrderMapper.deleteByClassOrderIdWithMemberAccount(classOrderId, memberAccount);
     }
+
+    @Override
+    public List<ClassOrder> selectByClassOrderId(Integer classId) {
+        return classOrderMapper.selectByClassOrderId(classId);
+    }
 }

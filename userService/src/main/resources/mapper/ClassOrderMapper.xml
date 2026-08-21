@@ -13,4 +13,7 @@
     <delete id="deleteByClassOrderIdWithMemberAccount" parameterType="com.gym.user.pojo.ClassOrder">
         delete from class_order where class_order_id = #{classOrderId} and member_account = #{memberAccount}
     </delete>
+    <select id="selectByClassOrderId" resultType="com.gym.user.pojo.ClassOrder">
+        select * from class_order where class_id = #{classId}
+    </select>
 </mapper>

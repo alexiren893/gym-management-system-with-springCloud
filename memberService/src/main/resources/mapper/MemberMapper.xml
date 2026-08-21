@@ -9,4 +9,8 @@
     <select id="userSelect" resultType="com.gym.member.pojo.Member">
         select * from member where member_account = #{memberAccount} and member_password = #{memberPassword}
     </select>
+    <update id="updateMember" parameterType="com.gym.member.pojo.Member">
+        update member set member_password = #{member.memberPassword} ,member_name = #{member.memberName} ,member_age = #{member.memberAge},member_gender = #{member.memberGender} ,member_phone = #{member.memberPhone},
+        member_height = #{member.memberHeight},member_weight = #{member.memberWeight} where member_account = #{member.memberAccount}
+    </update>
 </mapper>

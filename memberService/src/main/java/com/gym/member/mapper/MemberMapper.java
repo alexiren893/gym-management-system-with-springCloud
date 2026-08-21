@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Param;
 public interface MemberMapper extends BaseMapper<Member> {
     Boolean insertMember(Member member);
     Member userSelect(@Param("memberAccount") String memberAccount,@Param("memberPassword") String memberPassword);
+    Boolean updateMember(@Param("member") Member member);
 }
