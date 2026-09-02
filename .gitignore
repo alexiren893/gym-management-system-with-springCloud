@@ -18,6 +18,9 @@ target/
 *.iws
 *.iml
 *.ipr
+.reasonix
+.trae
+问题.txt
 
 ### NetBeans ###
 /nbproject/private/

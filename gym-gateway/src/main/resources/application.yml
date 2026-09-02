@@ -16,7 +16,7 @@ spring:
             - id: userLogin
               uri: lb://userService
               predicates:
-                - Path=/api/userLogin,/api/adminLogin,/api/logout
+                - Path=/api/userLogin,/api/adminLogin,/api/logout,/api/toUserMain,/api/toAdminMain
             - id: memberService
               uri: lb://memberService
               predicates:
