@@ -1,5 +1,9 @@
 # Gym Management System (健身房管理系统)
 
+<p align="center">
+  <a href="README.md">English</a>
+</p>
+
 基于 Spring Cloud 微服务架构的健身房管理系统，提供会员管理、员工管理、设备管理、课程管理等功能，前后端分离部署。
 
 ## 技术栈

@@ -1,5 +1,9 @@
 # Gym Management System
 
+<p align="center">
+  <a href="README.zh-CN.md">简体中文</a>
+</p>
+
 A gym management system built with Spring Cloud microservices architecture. Provides member management, employee management, equipment management, and class scheduling with a decoupled frontend/backend deployment.
 
 ## Tech Stack
