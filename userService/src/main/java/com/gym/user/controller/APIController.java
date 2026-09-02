@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import util.Jwt;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +38,12 @@ public class APIController {
     private final EmployeeFeignClient employeeFeignClient;
     private final UserServiceImpl userServiceImpl;
     private final AdminService adminService;
+    private static final Jwt jwt = new Jwt();
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
         session.invalidate();
-        return ResponseEntity.ok(loginSuccess());
+        return ResponseEntity.ok(loginSuccess(null));
     }
 
     @PostMapping("/adminLogin")
@@ -51,7 +53,7 @@ public class APIController {
             return loginFail();
     }
         putAdminMainDataInSession(httpSession, adminLogin);
-        return ResponseEntity.ok(loginSuccess());
+        return ResponseEntity.ok(loginSuccess(null));
 
 }
 
@@ -62,7 +64,7 @@ public class APIController {
             return loginFail();
         }
         putUserMainDataInSession(httpSession, userLogin);
-        return ResponseEntity.ok(loginSuccess());
+        return ResponseEntity.ok(loginSuccess(userLogin.getMemberAccount()));
 
     }
     @GetMapping("/toUserMain")
@@ -86,9 +88,10 @@ public class APIController {
 
 
 
-private static Map<String, Object> loginSuccess() {
+private static Map<String, Object> loginSuccess(Integer memberId) {
         Map<String, Object> map = new HashMap<>(2);
         map.put("success", true);
+        map.put("token", Jwt.creatToken(memberId));
         return map;
 }
 private static ResponseEntity<Map<String, Object>> loginFail() {
